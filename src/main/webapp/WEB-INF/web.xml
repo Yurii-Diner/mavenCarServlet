@@ -1,0 +1,79 @@
+<!--<!DOCTYPE> — объявляет тип документа-->
+<!--web-app — корневой элемент XML-->
+<!--PUBLIC — публичный идентификатор-->
+<!--"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" — уникальный идентификатор
+     DTD (Document Type Definition)-->
+<!--"http://java.sun.com/dtd/web-app_2_3.dtd" — ссылка на схему валидации XML-->
+<!--  Проще говоря: "Это XML-документ, который соответствует стандарту Servlet 2.3
+от Sun Microsystems".-->
+
+
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<!--2. Корневой элемент <web-app>:-->
+<!--Что это: Корневой элемент всего файла конфигурации. Внутри него настраивается
+всё веб-приложение.-->
+<web-app>
+
+<!--    3. Регистрация сервлета:-->
+<!--    <servlet>                → Начало объявления сервлета-->
+<!--        <servlet-name>       → Имя сервлета (ваше внутреннее название)-->
+<!--            carServlet       → "carServlet" - как будем обращаться внутри конфига-->
+<!--        </servlet-name>-->
+
+<!--        <servlet-class>      → Полное имя Java-класса сервлета-->
+<!--            controller.CarServlet → Класс в пакете controller-->
+<!--        </servlet-class>-->
+<!--    </servlet>               → Конец объявления-->
+
+<!--    Аналогия: Это как зарегистрировать сотрудника в компании:-->
+<!--    Имя в системе: carServlet (как в базе данных)-->
+<!--    Реальное имя: controller.CarServlet (паспортные данные)-->
+
+    <servlet>
+        <servlet-name>carServlet</servlet-name>
+        <servlet-class>controller.CarServlet</servlet-class>
+    </servlet>
+
+
+<!--    4. Сопоставление URL с сервлетом:-->
+
+<!--    <servlet-mapping>        → Связываем URL с сервлетом-->
+<!--        <servlet-name>       → Имя сервлета из предыдущего объявления-->
+<!--        carServlet       → Должно совпадать с <servlet-name> выше!-->
+<!--        </servlet-name>-->
+
+<!--        <url-pattern>        → Шаблон URL, который будет обрабатывать сервлет-->
+<!--            /cars            → Все запросы, начинающиеся с /cars-->
+<!--        </url-pattern>-->
+<!--    </servlet-mapping>-->
+
+<!--    Что это значит:-->
+<!--    Когда пользователь зайдет на http://ваш-сайт/ваше-приложение/cars-->
+<!--    Или отправит запрос POST /cars-->
+<!--    Томкат (сервер) будет вызывать controller.CarServlet-->
+
+    <servlet-mapping>
+        <servlet-name>carServlet</servlet-name>
+        <url-pattern>/cars</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+<!--        Пользователь в браузере:-->
+<!--        http://localhost:8080/myapp/cars-->
+<!--        ↓-->
+<!--        Томкат получает запрос:-->
+<!--        Запрос на /cars-->
+<!--        ↓-->
+<!--        Томкат смотрит в web.xml:-->
+<!--        "На какой URL настроены сервлеты?"-->
+<!--        ↓-->
+<!--        Находит: /cars → carServlet-->
+<!--        ↓-->
+<!--        Смотрит: carServlet → controller.CarServlet-->
+<!--        ↓-->
+<!--        Создает экземпляр CarServlet (если еще не создан)-->
+<!--        ↓-->
+<!--        Вызывает doGet() или doPost() в зависимости от метода запроса-->
