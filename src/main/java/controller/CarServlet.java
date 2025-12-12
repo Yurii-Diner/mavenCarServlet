@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;    // Объект HTTP-отв�
 import model.Car;                                   // Модель автомобиля
 
 import repository.CarRepository;
+import repository.CarRepositoryHibernate;
 import repository.CarRepositoryPostgress;
 
 import java.io.IOException;                         // Исключения ввода-вывода
@@ -23,7 +24,7 @@ public class CarServlet extends HttpServlet {
     // Репозиторий для работы с данными об автомобилях
     // Это наше "хранилище" данных (обычно база данных, здесь - Map)
     //private CarRepository carRepository = new CarRepositoryMap();
-    private CarRepository carRepository = new CarRepositoryPostgress();
+    private CarRepository carRepository = new CarRepositoryHibernate();
 
     // ObjectMapper из библиотеки Jackson для преобразования
     // Java-объектов в JSON и обратно
@@ -191,9 +192,9 @@ public class CarServlet extends HttpServlet {
         // будут происходить именения, и тот параметр который следует изменить
 
         try {
+
             // Из запроса мы Получаем идентификатор в формате строки
             String idParam = request.getParameter("id");
-
 
             // Если такого идентификатора не существует то выбрасываем исключение
             // и останавливаем программу
@@ -231,7 +232,7 @@ public class CarServlet extends HttpServlet {
             updatedCar.setId(id);
 
             // Сохраняем объект в репозиторий который в свою очередь уже сохранит ее в базу данных
-            Car updateCar = carRepository.save(updatedCar);
+            Car updateCar = carRepository.update(updatedCar);
             // Преобразуем сохраненный объект в JSON
             String json = mapper.writeValueAsString(updateCar);
             // отправляем клиенту
@@ -275,11 +276,12 @@ public class CarServlet extends HttpServlet {
             response.getWriter().write(mapper.writeValueAsString(result));
 
         }catch (Exception e){
-            // Сообщение которые отправятся клиенту в случае ошибки
+            //Статус ошибки
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+            // Сообщение которые отправятся клиенту в случае ошибки
             response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
 
         }
-
     }
 }

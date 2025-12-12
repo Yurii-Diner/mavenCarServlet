@@ -182,6 +182,7 @@ public class CarRepositoryPostgress implements CarRepository {
         // Делаем строку-шаблон для запроса в базу данных с целью обновления
         // строки с автомобилем, который передается на вход
         String sqlQuery = "UPDATE car SET brand=?, year=?, price=? WHERE id=?";
+        // String sqlQuery = "UPDATE car SET price=? WHERE id=?";
 
         // Создаем поток подключения к базе данных
         try (Connection connection = getConnection();
@@ -191,10 +192,10 @@ public class CarRepositoryPostgress implements CarRepository {
 
             // корректируем шаблон строки подменяя знаки вопроса на информацию об
             // автомобиле
-            ps.setString(1, car.getBrand());
-            ps.setInt(2, car.getYear());
-            ps.setBigDecimal(3, car.getPrice());
-            ps.setLong(4, car.getId());
+             ps.setString(1, car.getBrand());
+             ps.setInt(2, car.getYear());
+             ps.setBigDecimal(3, car.getPrice());
+             ps.setLong(4, car.getId());
 
             // Метод executeUpdate() предназначен для обновления данных в базе данных
             // Он дает нам обратную связь в виде значения int сообщая количество
@@ -280,13 +281,13 @@ public class CarRepositoryPostgress implements CarRepository {
         // Создаем список для автомобилей
         List<Car> cars = new ArrayList<>();
 
-        // Создаем строк запрос в базу данных
-        String sql = "SELECT * FROM car ORDER BY id";
+        // Создаем строку запроса для выборки из базы данных
+        String sqlquery = "SELECT id, brand, year, price FROM car ORDER BY id";
 
         // Открываем поток для чтения
         try (Connection connection = getConnection();
              // передаем строку запрос
-             PreparedStatement ps = connection.prepareStatement(sql);
+             PreparedStatement ps = connection.prepareStatement(sqlquery);
              // читаем базу данных
              ResultSet rs = ps.executeQuery()) {
 
@@ -294,7 +295,6 @@ public class CarRepositoryPostgress implements CarRepository {
             // next() - похож на итератор возвращает true если строка существует
             // Обходим базу данных до тех пор пока строки существуют
             while (rs.next()) {
-
                 // Добавля в список объект автомобиля
                 cars.add(mapCar(rs));
             }

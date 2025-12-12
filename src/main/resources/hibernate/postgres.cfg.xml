@@ -8,7 +8,7 @@
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5433/cohort71_cars</property>
         <property name="hibernate.connection.username">admin</property>
         <property name="hibernate.connection.password">admin123</property>
-<!--    <property name="hibernate.connection.driver_class">postgresql.Driver</property>-->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 
         <mapping resource="hibernate/Car.hbm.xml"/>
     </session-factory>
